@@ -36,14 +36,6 @@
 
 ### DEPLOYEMENT SUPPORT
 
-<summary>Deploy To Koyeb</summary>
-<p>
-<br>                 
-<a target="/blank" href="https://app.koyeb.com/deploy?type=git&repository=github.com/Jisshubot/Jisshu-forward-bot&branch=main&name=ultra-forward-bot" >
-  <img src="https://www.koyeb.com/static/images/deploy/button.svg" alt="Deploy">
-</a>
-</p>
-
 <summary>Deploy To Heroku</summary>
 <p>
 <br>
