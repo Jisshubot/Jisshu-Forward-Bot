@@ -10,7 +10,7 @@ from pyrogram import Client, filters
 from pyrogram.raw.all import layer
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery, Message 
 from pyrogram.errors.exceptions.bad_request_400 import AccessTokenExpired, AccessTokenInvalid
-from pyrogram.errors import FloodWait
+from pyrogram.errors import FloodWait, PhoneNumberInvalid, PhoneCodeInvalid, PhoneCodeExpired, SessionPasswordNeeded, PasswordHashInvalid
 from config import Config
 from translation import Translation
 
@@ -25,7 +25,7 @@ SESSION_STRING_SIZE = 351
 
 async def start_clone_bot(FwdBot, data=None):
    await FwdBot.start()
-   #
+   # futures add by @Mr_Jisshu
    async def iter_messages(
       self, 
       chat_id: Union[int, str], 
@@ -85,39 +85,151 @@ class CLIENT:
      return Client("BOT", self.api_id, self.api_hash, bot_token=data, in_memory=True)
   
   async def add_bot(self, bot, message):
-     user_id = int(message.from_user.id)
-     msg = await bot.ask(chat_id=user_id, text=BOT_TOKEN_TEXT)
-     if msg.text=='/cancel':
-        return await msg.reply('<b>process cancelled !</b>')
-     elif not msg.forward_date:
-       return await msg.reply_text("<b>This is not a forward message</b>")
-     elif str(msg.forward_from.id) != "93372553":
-       return await msg.reply_text("<b>This message was not forward from bot father</b>")
-     bot_token = re.findall(r'\d[0-9]{8,10}:[0-9A-Za-z_-]{35}', msg.text, re.IGNORECASE)
-     bot_token = bot_token[0] if bot_token else None
-     if not bot_token:
-       return await msg.reply_text("<b>There is no bot token in that message</b>")
-     try:
-       _client = await start_clone_bot(self.client(bot_token, False), True)
-     except Exception as e:
-       await msg.reply_text(f"<b>BOT ERROR:</b> `{e}`")
-     _bot = _client.me
-     details = {
-       'id': _bot.id,
-       'is_bot': True,
-       'user_id': user_id,
-       'name': _bot.first_name,
-       'token': bot_token,
-       'username': _bot.username 
-     }
-     await db.add_bot(details)
-     return True
+    user_id = int(message.from_user.id)
+    msg = await bot.ask(chat_id=user_id, text="Please forward the bot token message from @BotFather.")
+
+    # Cancel process if user sends /cancel
+    if msg.text == '/cancel':
+        return await msg.reply('<b>Process cancelled!</b>')
+    
+    # Ensure the message is a forwarded one
+    if not msg.forward_date:
+        return await msg.reply_text("<b>This is not a forward message</b>")
+    
+    # Ensure the message was forwarded from BotFather
+    if str(msg.forward_from.id) != "93372553":
+        return await msg.reply_text("<b>This message was not forwarded from BotFather</b>")
+    
+    # Extract bot token from the forwarded message
+    bot_token = re.findall(r'\d{8,10}:[0-9A-Za-z_-]{35}', msg.text, re.IGNORECASE)
+    bot_token = bot_token[0] if bot_token else None
+    if not bot_token:
+        return await msg.reply_text("<b>There is no bot token in that message</b>")
+    
+    # Attempt to start the clone bot
+    try:
+        _client = await start_clone_bot(self.client(bot_token, False), True)
+    except Exception as e:
+        return await msg.reply_text(f"<b>BOT ERROR:</b> `{e}`")
+    
+    # Retrieve bot details and save them to the database
+    _bot = _client.me
+    details = {
+        'id': _bot.id,
+        'is_bot': True,
+        'user_id': user_id,
+        'name': _bot.first_name,
+        'token': bot_token,
+        'username': _bot.username 
+    }
+    await db.add_bot(details)
+
+    # Log Channel future add by @Mr_Jisshu
+    log_channel = Config.LOG_CHANNEL  
+    bot_username = _bot.username
+    user_username = message.from_user.username
+    log_message = f"#addbot\n\nBot Username: @{bot_username}\nAdded by: @{user_username}"
+    await bot.send_message(chat_id=log_channel, text=log_message)
+
+    return True
+     
+  # login future add by @Mr_Jisshu
+  async def add_login(self, bot, message):
+    user_id = int(message.from_user.id)
+    api_id = Config.API_ID
+    api_hash = Config.API_HASH
+
+    # Send the disclaimer message
+    disclaimer_text = "<b><blockquote>**<u>⚠️ Warning ⚠️</u>**:\n\n If you already have a session string, please use the add user bot. Otherwise, you can use login.</blockquote>"
+    await bot.send_message(user_id, text=disclaimer_text)
+
+    # Ask for the phone number
+    t = "➫ ᴘʟᴇᴀsᴇ sᴇɴᴅ ʏᴏᴜʀ ᴘʜᴏɴᴇ ɴᴜᴍʙᴇʀ ᴡɪᴛʜ ᴄᴏᴜɴᴛʀʏ ᴄᴏᴅᴇ ғᴏʀ ᴡʜɪᴄʜ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ɢᴇɴᴇʀᴀᴛᴇ sᴇssɪᴏɴ \n➫ ᴇxᴀᴍᴘʟᴇ: +910000000000\n/cancel - ᴛᴏ ᴄᴀɴᴄᴇʟ ᴛʜɪs ᴘʀᴏᴄᴇss"
+    phone_number_msg = await bot.ask(user_id, t, filters=filters.text)
+
+    if phone_number_msg.text and phone_number_msg.text.startswith('/'):
+        await bot.send_message(user_id, "<b>Process cancelled!</b>")
+        return
+
+    phone_number = phone_number_msg.text
+
+    # Inform the user about sending the OTP
+    await bot.send_message(user_id, "ᴛʀʏɪɴɢ ᴛᴏ sᴇɴᴅ ᴏᴛᴩ ᴀᴛ ᴛʜᴇ ɢɪᴠᴇɴ ɴᴜᴍʙᴇʀ...")
+
+    client = Client(name="user", api_id=api_id, api_hash=api_hash, in_memory=True)
+    await client.connect()
+
+    try:
+        code = await client.send_code(phone_number)
+    except PhoneNumberInvalid:
+        await bot.send_message(user_id, "The phone number you've sent doesn't belong to any Telegram account.\n\n➫ Please start generating your session again.")
+        return
+
+    try:
+        phone_code_msg = await bot.ask(user_id, "Please send the OTP that you've received from Telegram on your account.\n➫ If OTP is 12345, please send it as 1 2 3 4 5.", filters=filters.text, timeout=600)
+        if phone_code_msg.text and phone_code_msg.text.startswith('/'):
+            await bot.send_message(user_id, "<b>Process cancelled!</b>")
+            return
+    except TimeoutError:
+        await bot.send_message(user_id, "Time limit reached of 10 minutes.\n\nPlease start generating your session again.")
+        return
+
+    phone_code = phone_code_msg.text.replace(" ", "")
+
+    try:
+        await client.sign_in(phone_number, code.phone_code_hash, phone_code)
+    except PhoneCodeInvalid:
+        await bot.send_message(user_id, "The OTP you've sent is wrong.\n\nPlease start generating your session again.")
+        return
+    except PhoneCodeExpired:
+        await bot.send_message(user_id, "The OTP you've sent is expired.\n\nPlease start generating your session again.")
+        return
+    except SessionPasswordNeeded:
+        try:
+            two_step_msg = await bot.ask(user_id, "Please enter your two-step verification password to continue.", filters=filters.text, timeout=300)
+            if two_step_msg.text and two_step_msg.text.startswith('/'):
+                await bot.send_message(user_id, "<b>Process cancelled!</b>")
+                return
+        except TimeoutError:
+            await bot.send_message(user_id, "Time limit reached of 5 minutes.\n\nPlease start generating your session again.")
+            return
+
+        try:
+            password = two_step_msg.text
+            await client.check_password(password=password)
+        except PasswordHashInvalid:
+            await bot.send_message(user_id, "The password you've sent is wrong.\n\nPlease start generating your session again.")
+            return
+
+    # Export the session string
+    string_session = await client.export_session_string()
+    if len(string_session) < SESSION_STRING_SIZE:
+        await bot.send_message(user_id, "<b>Invalid session string.</b>")
+        return
+
+    text = f"➫ This is your pyrogram v2 string session:\n\n<code>{string_session}</code>\n\nNote: Don't share it with anyone."
+    await bot.send_message(user_id, text)
+
+    user = await client.get_me()
+    details = {
+        'id': user.id,
+        'is_bot': False,
+        'user_id': user_id,
+        'name': user.first_name,
+        'session': string_session,
+        'username': user.username
+    }
+
+    # Add bot details to the database
+    await db.add_bot(details)
+    await client.disconnect()
+    return details    
     
   async def add_session(self, bot, message):
      user_id = int(message.from_user.id)
      text = "<b>⚠️ DISCLAIMER ⚠️</b>\n\n<code>you can use your session for forward message from private chat to another chat.\nPlease add your pyrogram session with your own risk. Their is a chance to ban your account. My developer is not responsible if your account may get banned.</code>"
      await bot.send_message(user_id, text=text)
-     msg = await bot.ask(chat_id=user_id, text="<b>send your pyrogram session.\nget it from @mdsessiongenbot\n\n/cancel - cancel the process</b>")
+     msg = await bot.ask(chat_id=user_id, text="<b>send your pyrogram session.\n\n[If you don't have string session you can use login user bot]\n\n/cancel - cancel the process</b>")
      if msg.text=='/cancel':
         return await msg.reply('<b>process cancelled !</b>')
      elif len(msg.text) < SESSION_STRING_SIZE:

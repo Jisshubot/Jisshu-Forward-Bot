@@ -1,3 +1,4 @@
+# bot developer @mr_jisshu
 import time as tm
 from database import db 
 from .test import parse_buttons

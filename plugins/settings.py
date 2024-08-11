@@ -2,6 +2,7 @@ import asyncio
 from database import db
 from translation import Translation
 from pyrogram import Client, filters
+from config import Config
 from .test import get_configs, update_configs, CLIENT, parse_buttons
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -10,9 +11,10 @@ CLIENT = CLIENT()
 @Client.on_message(filters.command('settings'))
 async def settings(client, message):
    await message.delete()
-   await message.reply_text(
-     "<b>change your settings as your wish</b>",
-     reply_markup=main_buttons()
+   await message.reply_photo(
+      photo=Config.PICS,
+      reply_markup=main_buttons(),
+      caption="<b>change your settings as your wish</b>"      
      )
     
 @Client.on_callback_query(filters.regex(r'^settings'))
@@ -37,6 +39,8 @@ async def settings_query(bot, query):
                          callback_data="settings#addbot")])
         buttons.append([InlineKeyboardButton('✚ Add User bot ✚', 
                          callback_data="settings#adduserbot")])
+        buttons.append([InlineKeyboardButton('✚ Login User bot ✚', 
+                         callback_data="settings#addlogin")])
      buttons.append([InlineKeyboardButton('↩ Back', 
                       callback_data="settings#main")])
      await query.message.edit_text(
@@ -50,6 +54,15 @@ async def settings_query(bot, query):
      await query.message.reply_text(
         "<b>bot token successfully added to db</b>",
         reply_markup=InlineKeyboardMarkup(buttons))
+
+   
+  elif type == "addlogin":
+     await query.message.delete()
+     user = await CLIENT.add_login(bot, query)
+     if user is None: return    
+     await query.message.reply_text(
+        "<b>Bot token successfully added to DB</b>",
+        reply_markup=InlineKeyboardMarkup(buttons))
   
   elif type=="adduserbot":
      await query.message.delete()
@@ -58,7 +71,7 @@ async def settings_query(bot, query):
      await query.message.reply_text(
         "<b>session successfully added to db</b>",
         reply_markup=InlineKeyboardMarkup(buttons))
-      
+  
   elif type=="channels":
      buttons = []
      channels = await db.get_user_channels(user_id)
@@ -206,13 +219,13 @@ async def settings_query(bot, query):
      buttons.append([InlineKeyboardButton('↩ Back', 
                       callback_data="settings#main")])
      await query.message.edit_text(
-        "<b><u>CUSTOM BUTTON</b></u>\n\n<b>You can set a inline button to messages.</b>\n\n<b><u>FORMAT:</b></u>\n`[Forward bot][buttonurl:https://t.me/KR_Forward_Bot]`\n",
+        "<b><u>🔘CUSTOM BUTTON</b></u>\n\n<b>You can add inline buttons to messages with the following format:</b>\n\n<b>Single Button in a row:</b>\n\n`[Forward bot][buttonurl:https://t.me/Jisshu_forward_bot]`\n\n<b>More than one button in same row:</b>\n\n`[forward bot][buttonurl:https://t.me/Jisshu_forward_bot]\n[forward bot][buttonurl:https://t.me/Jisshu_forward_bot(:same)]`",
         reply_markup=InlineKeyboardMarkup(buttons))
   
   elif type=="addbutton":
      await query.message.delete()
      try:
-         txt = await bot.send_message(user_id, text="**Send your custom button.\n\nFORMAT:**\n`[forward bot][buttonurl:https://t.me/KR_Forward_Bot]`\n")
+         txt = await bot.send_message(user_id, text="**Please send your custom button in the correct format.**")
          ask = await bot.listen(chat_id=user_id, timeout=300)
          button = parse_buttons(ask.text.html)
          if not button:
@@ -570,4 +583,7 @@ async def next_filters_buttons(user_id):
                     callback_data="settings#main")
        ]]
   return InlineKeyboardMarkup(buttons) 
-   
+
+  # powered by @JISSHU_BOTS
+
+  

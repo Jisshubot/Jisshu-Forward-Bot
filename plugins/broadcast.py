@@ -1,3 +1,4 @@
+# bot developer @mr_jisshu
 import asyncio 
 import time, datetime 
 from database import db 

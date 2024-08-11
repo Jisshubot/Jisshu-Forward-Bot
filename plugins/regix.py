@@ -17,7 +17,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQ
 CLIENT = CLIENT()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-TEXT = Translation.TEXT
+TEXT = Translation.TEXT1
 
 @Client.on_callback_query(filters.regex(r'^start_public'))
 async def pub_(bot, message):
@@ -33,15 +33,15 @@ async def pub_(bot, message):
     i = sts.get(full=True)
     if i.TO in temp.IS_FRWD_CHAT:
       return await message.answer("In Target chat a task is progressing. please wait until task complete", show_alert=True)
-    m = await msg_edit(message.message, "<code>verifying your data's, please wait.</code>")
+    m = await msg_edit(message.message, "<b>verifying your data's, please wait..</b>")
     _bot, caption, forward_tag, data, protect, button = await sts.get_data(user)
     if not _bot:
-      return await msg_edit(m, "<code>You didn't added any bot. Please add a bot using /settings !</code>", wait=True)
+      return await msg_edit(m, "<b>You didn't added any bot. Please add a bot using /settings !</b>", wait=True)
     try:
       client = await start_clone_bot(CLIENT.client(_bot))
     except Exception as e:  
       return await m.edit(e)
-    await msg_edit(m, "<code>processing..</code>")
+    await msg_edit(m, "<b>processing..</b>")
     try: 
        await client.get_messages(sts.get("FROM"), sts.get("limit"))
     except:
@@ -55,10 +55,10 @@ async def pub_(bot, message):
        return await stop(client, user)
     temp.forwardings += 1
     await db.add_frwd(user)
-    await send(client, user, "<b>🧡 ғᴏʀᴡᴀʀᴅɪɴɢ sᴛᴀʀᴛᴇᴅ 🥀 <a href=https://t.me/Jisshu_support>SUPPORT</a>🥀</b>")
+    await send(client, user, "<b>🚥 ғᴏʀᴡᴀʀᴅɪɴɢ sᴛᴀʀᴛᴇᴅ via <a href=https://t.me/Jisshu_forward_bot>Forward Bot</a></b>")
     sts.add(time=True)
     sleep = 1 if _bot['is_bot'] else 10
-    await msg_edit(m, "<code>Processing...</code>") 
+    await msg_edit(m, "<b>Processing...</b>") 
     temp.IS_FRWD_CHAT.append(i.TO)
     temp.lock[user] = locked = True
     if locked:
@@ -109,7 +109,7 @@ async def pub_(bot, message):
             temp.IS_FRWD_CHAT.remove(sts.TO)
             return await stop(client, user)
         temp.IS_FRWD_CHAT.remove(sts.TO)
-        await send(client, user, "<b>🎉 ғᴏʀᴡᴀᴅɪɴɢ ᴄᴏᴍᴘʟᴇᴛᴇᴅ 🥀 <a href=https://t.me/Jisshu_support>SUPPORT</a>🥀</b>")
+        await send(client, user, "<b>🎉 ғᴏʀᴡᴀᴅɪɴɢ ᴄᴏᴍᴘʟᴇᴛᴇᴅ</b>")
         await edit(m, 'Completed', "completed", sts) 
         await stop(client, user)
             
@@ -164,6 +164,8 @@ PROGRESS = """
 ♻️ Stataus: {4}
 
 ⏳️ ETA: {5}
+
+My Developer @Mr_Jisshu
 """
 
 async def msg_edit(msg, text, button=None, wait=None):
@@ -187,14 +189,14 @@ async def edit(msg, title, status, sts):
    elapsed_time = round(diff) * 1000
    time_to_completion = round(sts.divide(i.total - i.fetched, int(speed))) * 1000
    estimated_total_time = elapsed_time + time_to_completion  
-   progress = "◉{0}{1}".format(
-       ''.join(["◉" for i in range(math.floor(int(percentage) / 10))]),
-       ''.join(["◎" for i in range(10 - math.floor(int(percentage) / 10))]))
-   button =  [[InlineKeyboardButton(title, f'fwrdstatus#{status}#{estimated_total_time}#{percentage}#{i.id}')]]
+   progress = "▰{0}{1}".format(
+       ''.join(["▰" for i in range(math.floor(int(percentage) * 15/ 100))]),
+       ''.join(["▱" for i in range(15 - math.floor(int(percentage) * 15 / 100))]))
+   button = [[InlineKeyboardButton(f'{progress}', callback_data=f'fwrdstatus#{status}#{estimated_total_time}#{percentage}#{i.id}')]]
    estimated_total_time = TimeFormatter(milliseconds=estimated_total_time)
    estimated_total_time = estimated_total_time if estimated_total_time != '' else '0 s'
 
-   text = TEXT.format(i.fetched, i.total_files, i.duplicate, i.deleted, i.skip, status, percentage, estimated_total_time, progress)
+   text = TEXT.format(i.fetched, i.total_files, i.duplicate, i.deleted, i.skip, status, percentage, estimated_total_time, status)
    if status in ["cancelled", "completed"]:
       button.append(
          [InlineKeyboardButton('Support', url='https://t.me/Jisshu_support'),
@@ -293,7 +295,7 @@ async def status_msg(bot, msg):
     est_time = TimeFormatter(milliseconds=est_time)
     est_time = est_time if (est_time != '' or status not in ['completed', 'cancelled']) else '0 s'
     return await msg.answer(PROGRESS.format(percentage, fetched, forwarded, remaining, status, est_time), show_alert=True)
-                  
+      
 @Client.on_callback_query(filters.regex(r'^close_btn$'))
 async def close(bot, update):
     await update.answer()
