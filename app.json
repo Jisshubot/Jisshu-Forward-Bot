@@ -1,3 +1,4 @@
+
 {
   "name": "Auto-Forward-Bot-V2",
   "description": "Telegram's Best Smart Plugin File Forward Bot",
@@ -39,7 +40,7 @@
       "value": "document"
     },
     "DATABASE_URI": {
-      "description": "pyrogram string Seccion - https://replit.com/@JijinR/PyroSessionString?v=1",", 
+      "description": "pyrogram string Seccion - https://replit.com/@JijinR/PyroSessionString?v=1",
       "value": ""
     }
   },

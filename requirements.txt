@@ -2,6 +2,8 @@ pyrofork
 motor
 TgCrypto
 Dnspython
+datetime
+pytz
 
 #----app.py----#
 Flask==1.1.2

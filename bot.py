@@ -7,7 +7,7 @@ from pyrogram import Client, __version__
 from pyrogram.raw.all import layer 
 from pyrogram.enums import ParseMode
 from pyrogram.errors import FloodWait 
-
+# bot developer @mr_jisshu
 logging.config.fileConfig('logging.conf')
 logging.getLogger().setLevel(logging.INFO)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
@@ -60,3 +60,4 @@ class Bot(Client):
         msg = f"@{self.username} stopped. Bye."
         await super().stop()
         logging.info(msg)
+   # bot developer @mr_jisshu

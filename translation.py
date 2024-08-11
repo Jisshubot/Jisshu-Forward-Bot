@@ -2,17 +2,16 @@ import os
 from config import Config
 
 class Translation(object):
-  START_TXT = """<b>ʜᴇʟʟᴏ {}</b>
+  START_TXT = """<b>Hᴇʏ {},{}</b>
 
-<i>ɪ'ᴍ ᴀ <b>ᴘᴏᴡᴇʀғᴜʟʟ</b> ᴀᴜᴛᴏ ғᴏʀᴡᴀʀᴅ ʙᴏᴛ
+◈ I Aᴍ A Aᴅᴠᴀɴᴄᴇᴅ Aᴜᴛᴏ Fᴏʀᴡᴀʀᴅ Bᴏᴛ.
+◈ I Cᴀɴ Fᴏʀᴡᴀʀᴅ Aʟʟ Mᴇꜱꜱᴀɢᴇ Fʀᴏᴍ Oɴᴇ Cʜᴀɴɴᴇʟ Tᴏ Aɴᴏᴛʜᴇʀ Cʜᴀɴɴᴇʟ.
+◈ Cʟɪᴄᴋ Hᴇʟᴘ Bᴜᴛᴛᴏɴ Tᴏ Kɴᴏᴡ Mᴏʀᴇ Aʙᴏᴜᴛ Mᴇ.
 
-ɪ ᴄᴀɴ ғᴏʀᴡᴀʀᴅ ᴀʟʟ ᴍᴇssᴀɢᴇ ғʀᴏᴍ ᴏɴᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴀɴᴏᴛʜᴇʀ ᴄʜᴀɴɴᴇʟ</i> <b>➜ ᴡɪᴛʜ ᴍᴏʀᴇ ғᴇᴀᴛᴜʀᴇs.
-ᴄʟɪᴄᴋ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ᴛᴏ ᴋɴᴏᴡ ᴍᴏʀᴇ ᴀʙᴏᴜᴛ ᴍᴇ</b>
-
-<b>👨🏼‍💻 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ: <a href='https://t.me/JISSHU_BOTS'>JISSHU BOTS</a>🥀</b>"""
+<blockquote>ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ: <a href='https://t.me/JISSHU_BOTS'>Jɪssʜᴜ ʙᴏᴛs</a></blockquote></b>"""
 
 
-  HELP_TXT = """<b><u>🔆 HELP</b></u>
+  HELP_TXT = """<b><u>🛠️ HELP</b></u>
 
 <u>**📚 Available commands:**</u>
 <b>⏣ __/start - check I'm alive__ 
@@ -33,31 +32,33 @@ class Translation(object):
 """
   
   HOW_USE_TXT = """<b><u>⚠️ Before Forwarding:</b></u>
-<b>► __add a bot or userbot__
-► __add atleast one to channel__ `(your bot/userbot must be admin in there)`
-► __You can add chats or bots by using /settings__
+  
+<b>► __Add A Bot Or Userbot__
+► __Add Atleast One To Channel (Your Bot/Userbot Must Be Admin In There)
+► __You Can Add Chats Or Bots By Using /settings__
 ► __if the **From Channel** is private your userbot must be member in there or your bot must need admin permission in there also__
 ► __Then use /forward to forward messages__</b>"""
   
-  ABOUT_TXT = """<b>╭──────❰ 🤖 Bot Details ❱──────〄
-│ 
-│ 🤖 Mʏ Nᴀᴍᴇ : <a href=https://t.me/Jisshu_forward_bot>ғᴏʀᴡᴀʀᴅ ʙᴏᴛ</a>
-│ 👨‍💻 ᴅᴇᴠᴘʟᴏᴇʀ : <a href=https://t.me/IM_JISSHU>ZISHAN</a>
-│ 🤖 ᴜᴘᴅᴀᴛᴇ  : <a href=https://t.me/JISSHU_BOTS>JISSHU BOTS </a>
-│ 📡 ʜᴏsᴛ ᴏɴ : <a href=https://www.hetzner.com/>ʜᴇᴛᴢɴᴇʀ</a>
-│ 🗣️ ʟᴀɴɢᴜᴀɢᴇ  : ᴘʏᴛʜᴏɴ 3 
-{python_version}
-│ 📚 ʟɪʙʀᴀʀʏ  : ᴘʏʀᴏɢʀᴀᴍ  
-╰────────────────────⍟</b>"""
+  ABOUT_TXT = """<b>
+╭───────────⍟
+├◈ ᴍy ɴᴀᴍᴇ : <a href=https://t.me/Jisshu_forward_bot>Auto Forward Bot</a>
+├◈ Dᴇᴠᴇʟᴏᴩᴇʀꜱ : <a href=https://t.me/MR_JISSHU>Mr.Jisshu</a> 
+├◈ Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ: <a href=https://t.me/JISSHU_BOTS>JISSHU BOTS </a>   
+├◈ Lɪʙʀᴀʀy : <a href=https://github.com/pyrogram>Pyʀᴏɢʀᴀᴍ</a>
+├◈ Lᴀɴɢᴜᴀɢᴇ: <a href=https://www.python.org/>Pʏᴛʜᴏɴ 𝟹</a>
+├◈ Dᴀᴛᴀ Bᴀꜱᴇ: <a href=https://cloud.mongodb.com/>Mᴏɴɢᴏ DB</a>
+├◈ Bot Vᴇʀꜱɪᴏɴ: <a href=https://github.com/Jisshubot/Jisshu-forward-bot>V-2.4.1
+├◈ Bᴏᴛ Sᴏᴜʀᴄᴇ: <a href=https://github.com/Jisshubot/Jisshu-forward-bot>My Repo</a>
+╰───────────────⍟</b>"""
   
-  STATUS_TXT = """<b>╭──────❪ 🤖 Bot Status ❫─────⍟
-│
-├👨 ᴜsᴇʀs  : {}
-│
-├🤖 ʙᴏᴛs : {}
-│
-├📣 ᴄʜᴀɴɴᴇʟ  : {} 
-╰───────────────────⍟</b>""" 
+  STATUS_TXT = """<b><u>Bot Status</u>
+
+👨 ᴜsᴇʀs  : {}
+
+🤖 ʙᴏᴛs : {}
+
+📣 ᴄʜᴀɴɴᴇʟ  : {} 
+</b>""" 
   
   FROM_MSG = "<b>❪ SET SOURCE CHAT ❫\n\nForward the last message or last message link of source chat.\n/cancel - cancel this process</b>"
   TO_MSG = "<b>❪ CHOOSE TARGET CHAT ❫\n\nChoose your target chat from the given buttons.\n/cancel - Cancel this process</b>"
@@ -79,27 +80,37 @@ class Translation(object):
 ┃
 ╰────⌊ <b>{}</b> ⌉───❍</b>"""
 
-  TEXT1 = """<b>╭─❰ <u>Forwarded Status</u> ❱─❍
-┃
-┣⊸🕵𝙁𝙚𝙘𝙝𝙚𝙙 𝙈𝙨𝙜 : {}
-┣⊸✅𝙎𝙪𝙘𝙘𝙚𝙛𝙪𝙡𝙮 𝙁𝙬𝙙 : {}
-┣⊸👥𝘿𝙪𝙥𝙡𝙞𝙘𝙖𝙩𝙚 𝙈𝙨𝙜: {}
-┣⊸🗑𝘿𝙚𝙡𝙚𝙩𝙚𝙙 𝙈𝙨𝙜: {}
-┣⊸🪆𝙎𝙠𝙞𝙥𝙥𝙚𝙙 : {}
-┣⊸📊𝙎𝙩𝙖𝙩𝙨 : {}
-┣⊸⏳𝙋𝙧𝙤𝙜𝙧𝙚𝙨𝙨 : {}
-┣⊸𝙀𝙏𝘼 : {}
-┃
-╰─⌊ {} ⌉─❍</b>"""
+  TEXT1 = """
+╔════❰ ғᴏʀᴡᴀʀᴅ sᴛᴀᴛᴜs ❱➠
+║╭━━━━━━━━━━━━━━━➣
+║┃
+║┣⪼**🕵 ғᴇᴄʜᴇᴅ ᴍsɢ :** `{}`
+║┃
+║┣⪼**✅ sᴜᴄᴄᴇғᴜʟʟʏ ғᴡᴅ :** `{}`
+║┃
+║┣⪼**👥 ᴅᴜᴘʟɪᴄᴀᴛᴇ ᴍsɢ :** `{}`
+║┃
+║┣⪼**🗑️ ᴅᴇʟᴇᴛᴇᴅ ᴍsɢ :** `{}`
+║┃
+║┣⪼**🪆 sᴋɪᴘᴘᴇᴅ ᴍsɢ :** `{}`
+║┃
+║┣⪼**📊 sᴛᴀᴛᴜs  :** `{}`
+║┃
+║┣⪼**⏳ ᴘʀᴏɢʀᴇss :** `{}`
+║┃
+║┣⪼**⏰ ᴇᴛᴀ :** `{}`
+║┃
+║╰━━━━━━━━━━━━━━━➣ 
+╚════❰ **{}** ❱➠ """
 
   DUPLICATE_TEXT = """
-╔════❰ ᴜɴᴇǫᴜɪғʏ sᴛᴀᴛᴜs ❱═❍⊱❁۪۪
+╔════❰ ᴜɴᴇǫᴜɪғʏ sᴛᴀᴛᴜs ❱
 ║╭━━━━━━━━━━━━━━━➣
 ║┣⪼ <b>ғᴇᴛᴄʜᴇᴅ ғɪʟᴇs:</b> <code>{}</code>
 ║┃
 ║┣⪼ <b>ᴅᴜᴘʟɪᴄᴀᴛᴇ ᴅᴇʟᴇᴛᴇᴅ:</b> <code>{}</code> 
 ║╰━━━━━━━━━━━━━━━➣
-╚════❰ {} ❱══❍⊱❁۪۪
+╚════❰ ❱
 """
   DOUBLE_CHECK = """<b><u>DOUBLE CHECKING ⚠️</b></u>
 <code>Before forwarding the messages Click the Yes button only after checking the following</code>
